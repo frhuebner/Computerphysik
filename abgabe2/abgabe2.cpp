@@ -133,7 +133,7 @@ int main(int argc, char** argv){
 	sscanf(argv[2], "%lf", &v0);
 	
 	//calulate xi
-	xi = sqrt(2*MASS_ELECTRON*v0*CHARGE_ELECTRON)/H_BAR*a*1E-9;
+	xi = sqrt(2*MASS_ELECTRON*v0*CHARGE_ELECTRON)/H_BAR*a*1E-12;
 	cout << "a: " << a << " pm" << endl;
 	cout << "V0: " << v0 << " eV" << endl;
 	cout << "xi: " << xi << endl;
@@ -156,18 +156,18 @@ int main(int argc, char** argv){
 	
 	for(auto v: res){
 		//calculate the energy out of z, ie E = (z/a)²*H_BAR²/2/m-V0
-		double energy = (v.first/a)*(v.first/a)*1e18*H_BAR*H_BAR/2/MASS_ELECTRON-v0*CHARGE_ELECTRON;
+		double energy = (v.first/a)*(v.first/a)*1e24*H_BAR*H_BAR/2/MASS_ELECTRON-v0*CHARGE_ELECTRON;
 		//print the energy and even or odd
 		cout << energy << "\t" << (v.second?"even":"odd") << endl;  
 	}
-	/*
+	
 	cout << endl;
 	for(auto v: res){
 		//calculate the energy out of z, ie E = (z/a)²*H_BAR²/2/m-V0
 		double energy = (v.first/a)*(v.first/a)*1e18*H_BAR*H_BAR/2/MASS_ELECTRON-v0*CHARGE_ELECTRON;
 		//
 		cout << v.first << "\t" << v.second << "\t" << (v.second?g(v.first):h(v.first)) << "\t" << energy << endl;  
-	}*/
+	}
 	
 	return 0;
 }
