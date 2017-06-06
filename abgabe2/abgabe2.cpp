@@ -155,16 +155,16 @@ int main(int argc, char** argv){
 	//output the solutions
 	
 	for(auto v: res){
-		//calculate the energy out of z, ie E = (z/a)²*H_BAR²/2/m-V0
-		double energy = (v.first/a)*(v.first/a)*1e24*H_BAR*H_BAR/2/MASS_ELECTRON-v0*CHARGE_ELECTRON;
+		//calculate the energy in eVout of z, ie E = (z/a)²*H_BAR²/2/m-V0
+		double energy = (v.first/a)*(v.first/a)*1e24*H_BAR*H_BAR/2/MASS_ELECTRON/CHARGE_ELECTRON-v0;
 		//print the energy and even or odd
-		cout << energy << "\t" << (v.second?"even":"odd") << endl;  
+		cout << energy << "eV\t" << (v.second?"even":"odd") << endl;  
 	}
 	
 	cout << endl;
 	for(auto v: res){
 		//calculate the energy out of z, ie E = (z/a)²*H_BAR²/2/m-V0
-		double energy = (v.first/a)*(v.first/a)*1e18*H_BAR*H_BAR/2/MASS_ELECTRON-v0*CHARGE_ELECTRON;
+		double energy = (v.first/a)*(v.first/a)*1e18*H_BAR*H_BAR/2/MASS_ELECTRON/CHARGE_ELECTRON-v0*CHARGE_ELECTRON;
 		//
 		cout << v.first << "\t" << v.second << "\t" << (v.second?g(v.first):h(v.first)) << "\t" << energy << endl;  
 	}
