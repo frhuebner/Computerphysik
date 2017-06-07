@@ -32,7 +32,8 @@ Fiona Paulus 2909625}
 \newpage
 
 \section*{Allgemeine Hinweise}
-Das Programm wurde unter Windows 10 mit "g++ -o abgabe2.exe -Wall -Wextra -std=c++0x -O2 -static abgabe2.cpp"\;kompiliert.
+Das Programm wurde unter Windows 10 mit "g++ -o abgabe2.exe -Wall -Wextra -std=c++0x -O2 -static abgabe2.cpp"\;kompiliert.\\
+Das Programm wird gestartet mit 'abgabe2 a V0', wobei a in pm und V0 in eV ist. 
 
 \section*{Aufgabe 1}
 Da $z = q \cdot a$ und sowohl $q\geq 0$ als auch $a > 0$ folgt: $z \geq 0$.\\
@@ -76,8 +77,14 @@ Betrachte nun das letzte Intervall $J = [k\pi+\frac{\pi}{2}, \xi)$, mit $z \leq 
 
 Insgesamt gibt es somit also $n = \lfloor\frac{\xi}{\pi}-\frac{1}{2}\rfloor + 1$ Nullstellen.\\
 
+\section*{Umsetzung}
+Das gesamte Programm befindet sich in abgabe2.cpp.\\
+Die Nullstellen werden mit der Bisektionsmethode ermittelt. Dazu werden immer Intervalle $[k\pi,k\pi+\pi)$ betrachtet und in dem Intervall sowohl die gerade als auch die ungerade Nullstelle berechnet. Diese werden als Liste von Paaren von (z,b) zurückgegeben, wobei das double z die Nullstelle ist, und b ein bool, der genau dann wahr ist, wenn es eine gerade Lösung ist.\\
+Aufgrund des Algorithmus sind die Nullstellen schon aufsteigend in den z-Werten sortiert (und damit aufsteigend in den Energiewerten). Da es in der Aufgabenstellung verlangt war, sortieren wir die z-Werte trotzdem noch mal mit einem selbstprogrammiertem Quicksort-Algorithmus. Danach werden aus den z-Werten die Energien berechnet und diese ausgegeben. 
+  
+
 \section*{Sonstige Abgegebene Dateien}
-\subsection*{output.txt}
-Ausgabedatei der Simulation, die für das Plotten verwendet wurde.
+\subsection*{plot.plt}
+Die Plot-Datei für die beiden Plots in der Abgabe.
 
 \end{document}
