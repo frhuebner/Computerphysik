@@ -58,7 +58,7 @@ double bisektion(double (*f)(double), double l, double r){
 	for(int i=0;i<n;i++){
 		//take the middle of the interval
 		double m = (l+r)/2;
-		//found zero of f?
+		//foound zero of f?
 		if(f(m) == 0) return m;
 		//adjust l or r
 		if(f(m)*f(l) > 0){
