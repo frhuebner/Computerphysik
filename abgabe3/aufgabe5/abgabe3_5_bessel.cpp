@@ -9,9 +9,6 @@
 
 //constants in SI units
 #define PI 3.14159265358979323846
-#define MASS_ELECTRON 9.10938356e-31
-#define H_BAR 1.054571800e-34
-#define CHARGE_ELECTRON 1.6021766208e-19
 
 //Precision for finding the roots 
 #define PRECISION 1E-15
@@ -34,12 +31,15 @@ double bessel(int n, double x){
 
 int main(int argc, char** argv){
 	
+	if(argc != 4){
+		cerr << "Wrong number of arguments!" << endl;
+		return 1;
+	}
 	
 	int n;
 	double l;
 	double r;
 	sscanf(argv[1], "%d", &n);
-	cout << "n " << n << endl;
 	sscanf(argv[2], "%lf", &l);
 	sscanf(argv[3], "%lf", &r);
 	double dx = (r-l)/SAMPLES;

@@ -39,7 +39,7 @@ plot \
  set output "plot_bessel_7.png"
 plot \
  "bessel_7.txt" using 1:2 title "J_7(x)" with lines lt rgb "black"
-  set title "Bessel J_7(x)"
+  set title "Bessel J_0(x)"
  set output "plot_bessel_0.png"
 plot \
  "bessel_0.txt" using 1:2 title "J_0(x)" with lines lt rgb "black"

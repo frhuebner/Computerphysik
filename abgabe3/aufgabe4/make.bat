@@ -1,0 +1,1 @@
+g++ -o abgabe3_4.exe -Wall -Wextra -O2 -static -std=c++0x abgabe3_4.cpp
