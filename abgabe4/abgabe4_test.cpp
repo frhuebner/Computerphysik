@@ -6,6 +6,7 @@
 #include<limits.h>
 #include<utility>
 #include<fstream>
+//@fiona: this is important
 #include"abgabe4_runge_kutta.cpp"
 
 using namespace std;
@@ -31,7 +32,7 @@ void check_butcher(){
 		cout << "|\t" << sum << endl;
 	}
 }
-
+// function for y' = f(t,y) = 2*t*y -> solution is y(t) = exp(t²)
 vector<double> f(double t, vector<double> y){
 	return (2*t)*y;
 }
@@ -53,14 +54,24 @@ int main(int argc, char** argv){
 	check_butcher();
 	cout << endl << endl;
 	std::cout.precision(10);
+	
+		
 	ofstream fout("test.txt");
+	//@fiona: init with function f (see above) and t0 = 0 and y_0 = {0}
 	runge_kutta_init(f,0,{1});
 	for(int i=0;i<10000;i++){
+		//do one step
 		runge_kutta_iterate();
+		//get current time by runge_kutta_t
+		//get current y vector as runge_kutta_y
 		cout << runge_kutta_t << "\t" << runge_kutta_y[0] << "\t" << (runge_kutta_y[0]/exp(runge_kutta_t*runge_kutta_t)-1) << "\t" << runge_kutta_h << endl;
 		fout << runge_kutta_t << "\t" << runge_kutta_y[0] << "\t" << (runge_kutta_y[0]/exp(runge_kutta_t*runge_kutta_t)-1) << "\t" << runge_kutta_h << endl;  
 	}
 	fout.close();
+	
+	
+	
+	
 	fout.open("test1.txt");
 	runge_kutta_init(f1,0,{1,0});
 	for(int i=0;i<10000;i++){
