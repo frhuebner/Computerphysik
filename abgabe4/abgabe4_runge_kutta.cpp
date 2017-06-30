@@ -39,6 +39,18 @@ const vector<double> operator*(double l, const vector<double>& a){
 	return ret;
 }
 
+double dotproduct(const vector<double>& a, const vector<double>& b){
+	double sum = 0;
+	for(int i=0;i<a.size();i++){
+		sum+=a[i]*b[i];
+	}
+	return sum;
+}
+
+const vector<double> crossproduct(const vector<double>& a, const vector<double>& b){
+	return {a[2]*b[3]-a[3]*b[2],a[3]*b[1]-a[1]*b[3],a[1]*b[2]-a[2]*b[1]};
+}
+
 double abs(vector<double>& a){
 	double ret = 0;
 	for(int i=0;i<a.size();i++){
