@@ -9,6 +9,13 @@ using namespace std;
 #define RUNGE_KUTTA_ETA 0.8
 #define RUNGE_KUTTA_ORDER 5
 
+ostream& operator<<(ostream& o,const vector<double>& a){
+	for(int i=0;i<a.size();i++){
+		o << a[i] << (i==a.size()-1?"":"\t");
+	}
+	return o;
+}
+
 const vector<double> operator+(const vector<double>& a,const vector<double>& b){
 	vector<double> ret(a.size());
 	for(int i=0;i<a.size();i++){
@@ -48,7 +55,8 @@ double dotproduct(const vector<double>& a, const vector<double>& b){
 }
 
 const vector<double> crossproduct(const vector<double>& a, const vector<double>& b){
-	return {a[2]*b[3]-a[3]*b[2],a[3]*b[1]-a[1]*b[3],a[1]*b[2]-a[2]*b[1]};
+	vector<double> ret = {a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]};
+	return ret;
 }
 
 double abs(vector<double>& a){
@@ -57,13 +65,6 @@ double abs(vector<double>& a){
 		ret += a[i]*a[i];
 	}
 	return sqrt(ret);
-}
-
-ostream& operator<<(ostream& o,const vector<double>& a){
-	for(int i=0;i<a.size();i++){
-		o << a[i] << (i==a.size()-1?"":"\t");
-	}
-	return o;
 }
  
 double runge_kutta_h = 0.001;
