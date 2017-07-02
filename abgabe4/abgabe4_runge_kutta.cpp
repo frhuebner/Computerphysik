@@ -4,7 +4,6 @@ using namespace std;
 /*
  * use fehlberg
  */
-#define RUNGE_KUTTA_PRECISSION 1e-12
 #define RUNGE_KUTTA_SIZE 6
 #define RUNGE_KUTTA_ETA 0.8
 #define RUNGE_KUTTA_ORDER 5
@@ -66,7 +65,9 @@ double abs(vector<double>& a){
 	}
 	return sqrt(ret);
 }
- 
+
+static double runge_kutta_precission = 1e-12;
+
 double runge_kutta_h = 0.001;
 
 const double RUNGE_KUTTA_A[RUNGE_KUTTA_SIZE][RUNGE_KUTTA_SIZE] =
@@ -117,8 +118,8 @@ void runge_kutta_step(bool optimise){
 	
 	//control step size
 	double dh = abs(sum_b_k_diff)*h;
-	double hopt = RUNGE_KUTTA_ETA*h*pow(RUNGE_KUTTA_PRECISSION/dh,1.0/RUNGE_KUTTA_ORDER);
-	if(optimise && dh > RUNGE_KUTTA_PRECISSION){
+	double hopt = RUNGE_KUTTA_ETA*h*pow(runge_kutta_precission/dh,1.0/RUNGE_KUTTA_ORDER);
+	if(optimise && dh > runge_kutta_precission){
 		runge_kutta_h = hopt;
 		runge_kutta_step(false);
 		return;

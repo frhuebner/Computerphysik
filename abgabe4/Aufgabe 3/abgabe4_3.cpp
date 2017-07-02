@@ -38,14 +38,19 @@ int main(int argc, char** argv){
 	std::cout.precision(10);
 	
 	double t = 0;
-	runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-100000,0,0});
+	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-100000,0,0});
+	runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,100000});
+	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,1000000});
+	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,3000000});
+	
+	runge_kutta_precission = 1e-8;
 	
 	cout << t << "\t" << runge_kutta_y << endl;
-	for(int i=0;runge_kutta_t > 100 || i<1000000;i++){
+	while(runge_kutta_t <= 100){
 		//do one step
 		runge_kutta_iterate();
 		
-		if(((int)t) != ((int)runge_kutta_t)){
+		if((int)(t*10) != (int)(runge_kutta_t*10)){
 			cout << runge_kutta_t << "\t" << runge_kutta_y << endl;
 		}
 		t = runge_kutta_t;
