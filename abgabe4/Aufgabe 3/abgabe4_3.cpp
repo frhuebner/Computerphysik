@@ -23,14 +23,9 @@ vector<double> f(double t, vector<double> y){
 	vector<double> x = {y[0],y[1],y[2]};
 	vector<double> v = {y[3],y[4],y[5]};
 	double r = abs(x);
-	if(r==0) cout << "divide by 0 " << endl;
-	//cout << "r " << r << endl;
-	//cout << "v " << v << endl;
 	vector<double> m = {0,0,moment};
-	vector<double> B = MU0/4/PI/pow(r,5)*(((3*x[2]*moment)*x)-((r*r)*m));
-	//cout << "B " << B << endl; 
+	vector<double> B = MU0/4/PI/pow(r,5)*(((3*x[2]*moment)*x)-((r*r)*m)); 
 	vector<double> a = CHARGE_PROTON/MASS_PROTON*(crossproduct(v,B));
-	//cout << "a " << a << endl;
 	return {v[0],v[1],v[2],a[0],a[1],a[2]};
 }
 
@@ -40,11 +35,11 @@ int main(int argc, char** argv){
 	
 	double t = 0;
 	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-100000,0,0});
-	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,100000});
+	runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,100000});
 	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,1000000});
 	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,3000000});
 	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,10000000});
-	runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,100000000});
+	//runge_kutta_init(f,t,{6000000+RADIUS_EARTH,0,0,-1000000,0,100000000});
 	runge_kutta_precission = 1e-12;
 	//runge_kutta_precission = 1e-8;
 	
@@ -53,10 +48,10 @@ int main(int argc, char** argv){
 		//do one step
 		runge_kutta_iterate();
 		
-		//if((int)(t*10) != (int)(runge_kutta_t*10)){
+		if(t + 0.1 <= runge_kutta_t){
 			cout << runge_kutta_t << "\t" << runge_kutta_y << endl;
-		//}
-		t = runge_kutta_t;
+			t = runge_kutta_t;
+		}
 	}
 	
 	
