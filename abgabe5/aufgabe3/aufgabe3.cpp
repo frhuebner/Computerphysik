@@ -13,7 +13,7 @@
 #define NORM_LIMIT 0.001
 #define ENERGY_PRECISION 0.001
 #define ENERGY_SWEEP_STEP 0.1
-#define ENERGY_SWEEP_MAX 20
+#define ENERGY_SWEEP_MAX 40
 
 using namespace std;
 
@@ -24,7 +24,11 @@ double harmonicOscillator(double x){
 	return 0.5*x*x;
 }
 
-static double (*potential) (double) = harmonicOscillator; 
+double anharmonicOscillator(double x){
+	return 0.5*x*x + 1.5*x*x*x*x;
+}
+
+static double (*potential) (double) = anharmonicOscillator; 
 
 vector<double> numerov(double e, double y0,  double y1){
 	int samples = (int) (NUMEROV_MAX/NUMEROV_STEPSIZE);
@@ -45,8 +49,8 @@ PDI getNorm(vector<double> psi, int zeros){
 	PDI ret(0,-1);
 	int z = 0;
 	double sum = psi[0]*psi[0]/2;
-	for(int i=1;i<psi.size();i++){
-		if(z == zeros && psi[i]*psi[i]/(2*sum*NUMEROV_STEPSIZE) < NORM_LIMIT && psi[i-1]*psi[i-1] > psi[i]*psi[i]){
+	for(int i=1;i<psi.size()-1;i++){
+		if(z == zeros && psi[i]*psi[i]<psi[i+1]*psi[i+1]/*/(2*sum*NUMEROV_STEPSIZE) < NORM_LIMIT*/ && psi[i-1]*psi[i-1] > psi[i]*psi[i]){
 			sum += psi[i]*psi[i]/2;
 			ret.second = i;
 			cout << "stop at " << i*NUMEROV_STEPSIZE << endl;
@@ -164,7 +168,7 @@ int main(int argc, char** argv){
 		double norm = pdi.first;
 		int cutoff = pdi.second;
 		char filename[50];
-		sprintf(filename, "out_sweep_%d.txt", (int)round(energy*1000));
+		sprintf(filename, "out_sweep_perturbation_%d.txt", (int)round(energy*1000));
 		ofstream fout(filename);
 		
 		int plot_step = (int)(NUMEROV_MAX/NUMEROV_STEPSIZE/PLOT_SAMPLES);
