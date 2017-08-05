@@ -1,0 +1,1 @@
+g++ -o abgabe6_fit.exe -Wall -Wextra -O2 -static -std=c++0x abgabe6_fit.cpp

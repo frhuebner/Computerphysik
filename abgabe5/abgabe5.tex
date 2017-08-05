@@ -34,7 +34,7 @@ Fiona Paulus 2909625}
 \chapter*{Der Differentialgleichungssolver für Runge-Kutta-Verfahren}
 Für den DGL-Solver wurde das Runge-Kutta-Verfahren mit den Fehlbergkoeffizienten und das klassische Runge-Kutta-Verfahren programmiert. Die Berechnung aller Werte erfolgt genau nach diesen Verfahren. Der Solver wird sowohl in Aufgabe 1 als auch 2 mit den entsprechenden Koeffizienten benutzt. 
 
-\section*{Programm (abgabe4\_runge\_kutta.cpp)}
+\section*{Programm (abgabe5\_runge\_kutta.cpp)}
 In dieser Datei befindet sich das Runge-Kutta-Verfahren analog zur Hausarbeit 4.\\
 
 In der Datei wird die Klasse RungeKutta definiert, die einen DGL-Solver darstellt. diese hat folgende Funktionen:
@@ -47,6 +47,136 @@ In der Datei wird die Klasse RungeKutta definiert, die einen DGL-Solver darstell
 
 Außerdem werden in der Datei Operatoren für Vektorarithmetik (+,+=,-,*) und für Ausgabe von Vektoren (<\.<) überladen. Zusätzlich gibt es noch Funktionen für den Betrag von Vektoren und das Skalar- und Kreuzprodukt.  
 
+
+\chapter*{Aufgabe 1: Randwert}
+\section*{allgemeine Hinweise}
+Das Programm '1.cpp' wurde unter Linux Mint mit 'g++ -std=c++11 -g -Wall -Wextra 1.cpp -o 1.exe' kompiliert.
+
+\section*{a)}
+Um das gegebene Randwertproblem 
+\[
+y''(x)=\frac{2y(x)}{(1+x)^2},\quad y(0)=1,\quad y(1)=\frac{1}{2}
+\]
+zu lösen, integriert man die Differentialgleichungen
+\[
+y''(x) = \frac{2y(x)}{(1+x)^2}, \quad y(0)=1, \quad y'(0)=\alpha
+\]
+\[
+w''_\alpha(x)=\frac{2w_\alpha(x)}{(1+x)^2},\quad w_\alpha(0)=0, \quad w_\alpha'(0)=1
+\]
+\section*{b),c)}
+Diese Differentialgleichungen werden mit dem Fehlberg-Verfahren (s.o.) integriert um die Randbedingung $y'(0)=\alpha$ zu berechnen.
+Dazu wird zuerst ein Startwert $\alpha=2.0$ festgelegt, mit dem die Differentialgleichungen aus a) gelöst werden. Um den Wert von $\alpha$ zu überprüfen wird die Gleichung
+\[
+F(\alpha_n)=y(1,\alpha_n)-y(1)=0
+\]
+zu überprüfen. Gilt diese Gleichung nicht, wird ein neuer Wert von $\alpha$ berechnet.
+\[
+\alpha_n = \frac{F(\alpha_n)}{F'(\alpha_n)} = \frac{F(\alpha_n)}{w_{\alpha_n}(x)}
+\]
+Dieses Verfahren wird wiederholt bis die Gleichung $F(\alpha_n)=0$ erfüllt ist.
+In diesem Fall hat das Verfahren drei Iterationsschritte für $\alpha_n$, durch die lineare Funktion $F(\alpha)$ werden zwei Schritte erwartet, jedoch wird wird mit dem Fehlbergverfahren nicht exakt bis t=1 integriert, wodurch Abweichungen entstehen.
+\begin{center}
+	\begin{tabular}{ccc}
+		Iterationsschritt n & $\alpha_n$ & $F(\alpha_n)=y(1,\alpha_n)-y(1)$ \\
+		\\
+		0 & 2.0 & $F(\alpha_0)=3.55008$\\
+		1 & -0.997482 & $F(\alpha_1)=-0.00011$\\
+		2 & -0.997294 & $F(\alpha_2)=-2.71\cdot10^{-6}$\\
+	\end{tabular}
+\end{center}
+Daraus kann man ablesen, dass das Randwertproblem für $\alpha \approx -1$ gelöst ist.
+\begin{center}
+	\includegraphics*[scale=0.7]{1.jpeg}
+	\captionof*{figure}{Funktion $F(\alpha_1)=y(1,\alpha_n)-y(1)$ für $\alpha_0=2.0$}
+\end{center}
+
+\section*{Sonstige abgegebene Dateien}
+\subsection*{1.txt}
+Ausgabedatei des Programms "1.cpp"
+\subsection*{1.plt}
+Plotdatei für Gnuplot für Aufgabe 1
+\subsection*{fit.log}
+Geradenfit für $F(\alpha)$ mit Gnuplot gelöst
+
+\chapter*{Aufgabe 2: Kepler-Orbit}
+\section*{Allgemeine Hinweise}
+Das Programm '2.cpp' wurde unter Linux Mint mit 'g++ -std=c++11 -g -Wall -Wextra 2.cpp -o  2.exe' kompiliert.
+
+\section*{Kepler-Orbit}
+Die Differentialgleichung
+\[
+\mu \ddot{r}=-G\frac{m_1 m_2}{r^2}\hat{e}_r, \quad r_0 = (1,0,0), \quad v_0 = (0,1,0)
+\]
+wird sowohl mit dem klassischen Runge-Kutta-Verfahen (s.o.), als auch mit dem Leapfrog-Verfahren gelöst. Die Lösung mithilfe des Leapfrog-Verfahrens erfolgt ebenfalls durch eine Schrittweise Integration, wobei die schritte für Ort und Geschwindigkeit versetzt berechnet werden.
+\[
+r_{i+1} = r_i + {v}_{i+\frac{1}{2}} \Delta t
+\]
+\[
+v_{i+\frac{3}{2}} = v_i + \ddot{r}_{i+1} \Delta t = v_{i+\frac{1}{2}} - G\frac{m_1 m_2}{r  \mu}\hat{e}_r\Delta t
+\]
+Wobei bei beiden Verfahren die Schrittweite konstant $\Delta t=0.01$ ist.
+Der Anfangswert der Geschwindigkeit wird berechnet durch:
+\[
+v_{\frac{1}{2}}=v_0+\frac{\Delta t}{2} a(r_0)
+\]
+dadurch muss die Geschwindigkeit bei der Ausgabe wieder zurück verschoben werden um r und v zur gleichen Zeit auszugeben.
+\[
+v_i = v_{i+\frac{1}{2}}-\frac{\Delta t}{2}*a(r_i)
+\]
+Bei jedem Iterationsschritt wird die Energie 
+\[
+E = \frac{1}{2} m_1 v_i^2 -G\frac{m_1 m_2}{\vert r_i\vert}
+\]
+und der Laplace-Runge-Lenz-Vektor
+\[
+\vec{A} = \vec{p} \times \vec{L} - m_1 \alpha \hat{e}_{r_i}=m_1\vec{v_i}\times(\vec{r}_i \times m_1\vec{v}_i) - G m_1^2 m_2 \hat{e}_{r_i}
+\]
+mit
+\[
+\vec{p}=m_1 \vec{v_i}, \quad \vec{L}=\vec{r}_i \times \vec{p}, \quad \alpha=G m_1 m_2
+\]
+Die Lösung mithilfe des Runge-Kutta-Verfahrens ergibt:
+\begin{center}
+	\includegraphics*[scale=0.7]{2_runge_kutta_bewegung.jpeg}
+	\captionof*{figure}{Kepler-Orbit durch Lösung mit Runge-Kutta-Verfahren}
+\end{center}
+
+\begin{center}
+	\includegraphics*[scale=0.7]{2_runge_kutta_energie.jpeg}
+	\captionof*{figure}{Entwicklung der Energie des Kepler-Orbits durch Lösung mit Runge-Kutta-Verfahren}
+\end{center}
+
+\begin{center}
+	\includegraphics*[scale=0.7]{2_runge_kutta_lrl.jpeg}
+	\captionof*{figure}{Verhalten des Laplace-Runge-Lenz-Vektors durch Lösung mit Runge-Kutta-Verfahren}
+\end{center}
+
+Die Lösung mithilfe des Leapfrog-Verfahrens ergibt:
+\begin{center}
+	\includegraphics*[scale=0.7]{2_leapfrog_bewegung.jpeg}
+	\captionof*{figure}{Kepler-Orbit durch Lösung mit Leapfrog-Verfahren}
+\end{center}
+
+\begin{center}
+	\includegraphics*[scale=0.7]{2_leapfrog_energie.jpeg}
+	\captionof*{figure}{Entwicklung der Energie des Kepler-Orbits durch Lösung mit Leapfrog-Verfahren}
+\end{center}
+
+\begin{center}
+	\includegraphics*[scale=0.7]{2_leapfrog_lrl.jpeg}
+	\captionof*{figure}{Verhalten des Laplace-Runge-Lenz-Vektors durch Lösung mit Leapfrog-Verfahren}
+\end{center}
+
+Man kann an den vier Plots erkennen, dass die Energie und der Runge-Lenz-Vektor (und somit auch die Lage der Periapsis) bis auf kleine Abweichungen ($\approx 10^{-6}$ bzw. $\approx 10^{-3}$) erhalten sind. 
+
+\section*{Sonstige abgegebene Dateien}
+\subsection*{2-leapfrog.txt}
+Ausgabedatei des Leapfrog-Verfahrens aus Programm "2.cpp"
+\subsection*{2-runge-kutta.txt}
+Ausgabedatei des Runge-Kutta-Verfahrens aus Programm "2.cpp"
+\subsection*{2.plt}
+Plotdatei für alle Plots
 
 \chapter*{Aufgabe 3}
 \section*{Allgmeine Hinweise}
