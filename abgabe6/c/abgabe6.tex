@@ -1,0 +1,130 @@
+\documentclass{scrreprt}
+\usepackage{etex}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.11}
+\usepgfplotslibrary{external}
+\usepackage{pgfplotstable}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{longtable}
+%\usepackage{ulsy}
+%\usepackage{pst-all}
+\usepackage{picture}
+\usepackage[automark]{scrpage2}
+\usepackage{caption}
+\pagestyle{scrheadings}
+\ihead[]{Friedrich Hübner 2897111}
+\ohead[]{Fiona Paulus 2909625} 
+
+
+\author{Friedrich Hübner 2897111\\
+	Fiona Paulus 2909625}
+\title{Computerphysik\\Hausarbeit 6}
+
+\begin{document}
+	\maketitle
+	\newpage
+	
+\chapter*{Aufgabe 1: Gammalinie}
+\section*{allgemeine Hinweise}
+Das Programm zu Aufgaben b) und c) wurde unter Linux-Mint mit 'g++ -std=c++11 -g -Wall -Wextra b.cpp -o b.exe' kompiliert.
+\section*{a)}
+Das Plotten der Datei "profile.dat" ergibt das Spektrum eines Gammastrahlers. Es wird die Impulsrate gegen die Energie aufgetragen.
+\begin{center}
+	\includegraphics*[scale=0.7]{a.jpeg}
+	\captionof*{figure}{Spektrum eines Gammastrahlers}
+\end{center}
+
+\section*{b}
+Aus dem Spektrum des Gammastrahlers aus a) soll der Kosmische Mikrowellen Hintergrund berechnet werden. Dazu wird eine Spline-Interpolation verwendet, welche mithilfe von festglegten Stützstellen $x_i$ und den dazugehörigen Stützwerten $y_i$ ein Polynom 3.Grades an die Messdaten fittet ("b.cpp").
+
+Dieses Polynom und seine Ableitungen werden für jedes Intervall berechnet.
+
+\[S_i(x)=a_i(x-x_i)^3+b_i(x-x_i)^2+c_i(x-x_i)+d_i\]
+\[S'_i(x)=3a_i(x-x_i)^2+2b_i(x-x_i)+c_i\]
+\[S''_i(x)=6a_i(x-x_i)+2b_i\]
+
+\[0 \leq i \leq n\]
+n: Anzahl der Stützstellen
+
+Um das Gleichungssystem zu lösen werden Bedingungen aufgestellt.
+Die Gesamtfunktion muss stetig sein, somit müssen die Polynome der Intervalle an den Stützstellen übereinstimmen.
+
+\[S_i(x_i)=S_{i-1}(x_i)\]
+\[S'_i(x_i)=S'_{i-1}(x_i)\]
+\[S''_i(x_i)=S''_{i-1}(x_i)\]
+Außerdem müssen die Funktionswerte an den Stützstellen mit den zugehörigen Stützwerten übereinstimmen.
+
+\[S_i(x_i)=y_i\]
+\[S_{n-1}(x_n)=y_n\]
+Und die Krümmung an den Rändern der Gesamtfunktion soll verschwinden.
+
+Die Interpolation wird mit folgenden Stützwerten und dazugehörigen Stützstellen durchgeführt:
+
+\begin{center}
+		\begin{tabular}{cccc}
+			Stützwert i & Messwert k & Stützstelle $x_i$ & Stützwert $y_i$\\
+			\\
+			0 & 15 & 50 & 887.992\\
+			1 & 415 & 250 & 701.793\\
+			2 & 715 & 400 & 623.281\\
+			3 & 1015 & 550 & 486.757\\
+			4 & 1415 & 750 & 266.316\\
+			5 & 1715 & 900 & 209.190\\
+		\end{tabular}
+\end{center}
+
+Daraus werden die Abstände $h_i=x_{x+1}-x_i$ $0 \leq i \leq 4$ zwischen den Stützpunken berechnet, mit deren Hilfe die Koeffizienten A,B,C,D berechnet werden.
+
+\[A_i = h_{i-1}\]
+\[B_i = 2(h{i-1}+h_i)\]
+\[C_i = h_i\]
+\[D_i = g(\frac{y_{x+1}-y_i}{h_i}-\frac{y_i-y_{i-1}}{h_{i-1}})\]
+Daraus werden weitere Koeffizienten berechnet:
+
+
+\[B'_i = B_i-C_{i-1}\frac{A_i}{B_{i-1}}\]
+\[D'_i = D_i-D_{i-1}\frac{A_i}{B_{i-1}}\]
+mit $B_1=B'_1$ und $D_1=D'_1$
+Außerdem gilt:
+\[X_i=y''_i\]
+\[X_4 = \frac{D'_4}{B'_4}\]
+wodurch sich alle weiteren $X_i$ rekursiv berechnen lassen.
+
+Aus diesen Koeffizienten ergeben sich nun die Koeffizienten der Polynome a,b,c und d.
+
+\[a_i = \frac{y''_{i+1}-y''_i}{6h_i}\]
+\[b_i = \frac{y''_i}{2}\]
+\[c_i = \frac{y_{i+1}-y_i}{h_i}-\frac{h_i(y''_{i+1}+2y''_i)}{g}\]
+\[d_i = y_i\]
+
+Mit diesen Koeffizienten ergeben sich die Polynome mit denen die Funktion des Kosmischen Hintergrunds beschrieben wird.
+
+\begin{center}
+	\includegraphics*[scale=0.7]{b.jpeg}
+	\captionof*{figure}{Spektrum eines Gammastrahlers und Kosmischer Mikrowellenhintergrund}
+\end{center}
+\section*{c)}
+Nun wird die Funktion des Kosmischen Hintergrunds von der Gammalinie subtrahiert um die reine Strahlung des Gammastrahlers zu erhalten.("b.cpp")
+
+\begin{center}
+	\includegraphics*[scale=0.7]{c.jpeg}
+	\captionof*{figure}{Spektrum eines Gammastrahlers ohne kosmischen Mikrowellenhintergrund}
+\end{center}
+
+\section*{sonstige abgegebene Datein}
+\subsection*{plot.plt}
+Plotdateien für Aufgabenteile a),b) und c)
+\subsection*{cmb.dat}
+Ausgabedatei des Programms "b.cpp" für den Aufgabenteil b)
+\subsection*{profile-cmb.dat}
+Ausgabedatei des Programms "b.cpp" für den Aufgabenteil c)
+
+\end{document}
